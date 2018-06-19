@@ -1,0 +1,26 @@
+{
+  "name": "rbtc-quant",
+  "version": "1.0.0",
+  "description": "https://www.rbtc.io/  Quant Api",
+  "main": "./demo/index.js",
+  "scripts": {
+    "start": "node ./demo/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create-rsa": "node ./demo/rsa.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RbtcTrade/RbtcQuant.git"
+  },
+  "author": "rbtc.io",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RbtcTrade/RbtcQuant/issues"
+  },
+  "homepage": "https://github.com/RbtcTrade/RbtcQuant#readme",
+  "dependencies": {
+    "decimal.js": "^10.0.1",
+    "node-rsa": "^1.0.0",
+    "websocket": "^1.0.26"
+  }
+}
