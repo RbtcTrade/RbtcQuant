@@ -14,7 +14,7 @@ npm run create-rsa
 
 ## ws url
 ```bash
-wss://market-api.rdb.one/sub
+wss://market-api.rbtc.io/sub
 ```
 
 ## ws 数据格式
@@ -44,7 +44,8 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 
 ## RSA 登录
 订阅市场
-* market 当前交易市场 _连接
+* 用户相关的数据必须先登录以后才能订阅
+* market 当前交易市场 _连接   必须字段
 * uid 用户id
 * rsa_ciphertext  当前用户手机号 RSA私钥加密的 base64 字符串
 ```json
