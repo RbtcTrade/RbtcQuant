@@ -58,9 +58,9 @@ userOrder.watch(function (val, old) {
     if(!userOrder.state){
         if(val.length){
             console.log('withdrawal', JSON.stringify(val[0]));
-            ws.send("withdrawal", {
-                order_id : val[0][0]
-            });
+            // ws.send("withdrawal", {
+            //     order_id : val[0][0]
+            // });
         };
     };
 });
@@ -76,19 +76,19 @@ userAssets.watch(function (val, old) {
     // console.log(JSON.stringify(val));
     if(userAssets.state == false){
         // 买
-        ws.send("order", {
-            type : "Buy",
-            price : '100000',
-            count : '0.0001',
-            ts : Date.now(),
-        });
+        // ws.send("order", {
+        //     type : "Buy",
+        //     price : '100000',
+        //     count : '0.0001',
+        //     ts : Date.now(),
+        // });
         // 卖
-        ws.send("order", {
-            type : "Sell",
-            price : '100001',
-            count : '0.0001',
-            ts : Date.now(),
-        });
+        // ws.send("order", {
+        //     type : "Sell",
+        //     price : '100001',
+        //     count : '0.0001',
+        //     ts : Date.now(),
+        // });
     };
 });
 
