@@ -45,10 +45,10 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 ## 登录
 订阅市场
 * 用户相关的数据必须先登录以后才能订阅，未登录订阅用户数据可能会造成服务端主动关闭 websocket
-* market 当前交易市场 _连接   必须字段
+* market 当前交易市场， _连接, 左边是交易货币，右边是支付货币(必须字段)
 * uid 用户id
 * token  当前用户登录时随机生成512长度的字符串 [RBTC登录](https://www.rbtc.io/home/login/login)
-* rsa_ciphertext  当前用户手机号 RSA私钥加密的 base64 字符串 [API上传地址](https://www.rbtc.io/home/safety/api)
+* rsa_ciphertext  当前用户手机号 RSA私钥加密的 base64 字符串，请用户先设置RSA公钥 [RSA公钥设置](https://www.rbtc.io/home/safety/api)
 * 用户登录token和rsa_ciphertext必须传一个
 ```json
 {
