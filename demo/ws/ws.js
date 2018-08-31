@@ -6,10 +6,10 @@ const WebSocketClient = require('websocket').client;
  * @constructor
  */
 function WS(param) {
-    this.wsUrl = 'ws://23.91.100.214:8686/sub';
+    this.wsUrl = 'wss://market-api.rbtc.io/sub';
     this.heartTime = 5 * 1000;
     this.userParam = {
-        market : 'pyc_cnt',
+        market : 'del_pyc',
         uid : '7490',
     };
     if(typeof param == 'object'){

@@ -3,9 +3,9 @@ const wsRSA = require('./ws/wsRSA');
 const {UserOrder, UserAssets, DepthSell, DepthBuy, DealList} = require('./ws/data');
 
 let ws = new WS({
-    wsUrl : 'wss://market-api.rdb.one/sub',
+    wsUrl : 'wss://market-api.rbtc.io/sub',
     userParam : {
-        market : 'pyc_cnt',
+        market : 'del_pyc',
         uid : '7490',
     }
 });
