@@ -147,7 +147,7 @@ class DepthSell extends tempClass{
             data.forEach(item => {
                 var itemK = item[0];
                 if(depthKey[itemK]){
-                    var n = Decimal.sub(depthKey[itemK], item[1]).toFixed(8);
+                    var n = (parseFloat(depthKey[itemK]) + parseFloat(item[1])).toFixed(8);
                     if(n == 0){
                         delete depthKey[itemK];
                     }else{
