@@ -220,6 +220,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 ## 3日价格趋势
 * 在**pull_user_market**的参数market不填的情况下，第一次请求**pull_home_market_trend**则返回所有市场的3日价格趋势，之后会自动推送有修改的数据
 * 在填写了有效的**pull_user_market**的参数market的情况下，第一次请求**pull_home_market_trend**则返回指定市场的3日价格趋势，之后若该市场有修改数据时会自动推送
+
 订阅
 ``` json
 {
