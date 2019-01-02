@@ -17,13 +17,27 @@ npm run create-rsa
 wss://market-api.rbtc.io/sub
 ```
 
+## ws 协议
+|接口|说明|是否需要用户验证|返回|
+----------------------|---------------------|---------------------|---------------------|
+pull_user_market	|订阅市场或登录|-|push_user_market|
+pull_user_assets	|请求用户当前余额|是|push_user_assets|
+pull_user_order	|请求用户当前交易对委托|是|push_user_order|
+pull_user_deal	|请求用户当前交易对已成交记录|是|push_user_deal|
+order	|委托挂单|是|order_resp|
+withdrawal	|撤单|是|withdrawal_resp|
+pull_home_market_quote	|请求24小时行情数据|否|push_home_market_quote|
+pull_home_market_trend	|请求3日价格趋势|否|push_home_market_trend|
+pull_merge_depth_order_list	|请求委托挂单深度|否|push_merge_depth_order_list|
+pull_deal_order_list	|请求当前交易对实时成交记录|否|push_deal_order_list|
+pull_heart	|心跳包|否|push_heart|
 ## ws 数据格式
 * ws 订阅发送utf8编码的json字符串
 ```json
 {
     "method":"pull_user_market",
     "data":{
-        "market" : "pyc_cnt",
+        "market" : "btc_usdt",
         "uid" : "7490",
         "rsa_ciphertext" : "rsa_ciphertext"
     }
@@ -42,11 +56,11 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 }
 ```
 
-## 登录
-订阅市场
+## 订阅市场或登录
+
 * 用户相关的数据必须先登录以后才能订阅，未登录订阅用户数据可能会造成服务端主动关闭 websocket
-* market 当前交易市场， _连接, 左边是交易货币，右边是支付货币(必须字段)
-* uid 用户id
+* market 当前交易市场， _连接, 左边是交易货币，右边是支付货币(必须字段)如btc_usdt
+* uid 用户id[可以选字段，当这个不填或填0，表示不登录]
 * token  当前用户登录时随机生成512长度的字符串 [RBTC登录](https://www.rbtc.io/home/login/login)
 * rsa_ciphertext  当前用户手机号 RSA私钥加密的 base64 字符串，请用户先设置RSA公钥 [RSA公钥设置](https://www.rbtc.io/home/safety/api)
 * 用户登录token和rsa_ciphertext必须传一个
@@ -62,7 +76,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 }
 ```
 推送
-* 登录状态 data[0][0] == 1 ? "登录失败" : "登录成功"
+* 登录状态 data[0][0] == 0 ? "登录成功" : "登录失败"
 ```json
 {
     "method":"push_user_market",
@@ -80,7 +94,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 }
 ```
 推送
-* 第一次推送是20条的深度数据，以后的推送是变动的深度数据（数据结构不变）。你要自己合并深度，详情查看demo 
+* 第一次推送是20条的深度数据，以后的推送是变动的深度数据（数据结构不变）。需要自行合并深度，详情查看demo 
 * ["33.31000000","6.60912639"] 价格,数量
 ```json
 {
@@ -101,6 +115,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 ```
 
 ## 用户当前余额
+* 登录成功后请求一次为最新余额，之后可以在每次收到**push_user_order**或**push_user_deal**后请求一次可获得最新余额
 订阅
 ```json
 {
@@ -133,7 +148,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 
 ## 用户当前交易对委托
 订阅
-* max_count 获取的委托挂单数量，-1获取全部委托，默认30
+* max_count 获取的委托挂单数量，-1获取全部委托，可选参数，不填则是返回默认的**30**条
 ```json
 {
   "method" : "pull_user_order",
@@ -164,18 +179,23 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 }
 ```
 推送
+* 第一次推送最多 30 条数的委托，后面推送变动的数据
 * 推送数据结构同用户当前交易对委托  push_user_order
+* ["1529401690299552949",1529402081000,"sell","100001.00000000","0.00010000","0.00010000","deal"]
+* 订单号，时间，类型，价格，未成交数量，委托数量，状态（deal成交）
 ```json
 {
     "method":"push_user_deal",
     "data":[
-        ["1529401690299552949",1529402081000,"sell","100001.00000000","0.00010000","0.00010000","ing"],
-        ["1529401690299552948",1529402081000,"buy","100000.00000000","0.00010000","0.00010000","ing"]
+        ["1529401690299552949",1529402081000,"sell","100001.00000000","0.00010000","0.00010000","deal"],
+        ["1529401690299552948",1529402081000,"buy","100000.00000000","0.00010000","0.00010000","deal"]
     ]
 }
 ```
 
-## 当前交易对24小时行情数据，未先订阅交易对订阅行情会返回所有的交易对行情，单独订阅一个交易对请先
+## 当前交易对24小时行情数据，未先订阅交易对订阅行情会返回所有的交易对行情，单独订阅一个交易对请先订阅
+* 在**pull_user_market**的参数market不填的情况下，第一次请求**pull_home_market_quote**则返回所有市场最近24小时数据，之后会自动推送有修改的数据
+* 在填写了有效的**pull_user_market**的参数market的情况下，第一次请求**pull_home_market_quote**则返回指定市场最近24小时数据，之后若该市场有修改数据时会自动推送
 订阅
 ```json
 {
@@ -197,6 +217,39 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 }
 ```
 
+## 3日价格趋势
+* 在**pull_user_market**的参数market不填的情况下，第一次请求**pull_home_market_trend**则返回所有市场的3日价格趋势，之后会自动推送有修改的数据
+* 在填写了有效的**pull_user_market**的参数market的情况下，第一次请求**pull_home_market_trend**则返回指定市场的3日价格趋势，之后若该市场有修改数据时会自动推送
+订阅
+``` json
+{
+	"method" : "pull_home_market_trend"
+}
+```
+推送
+* 第一次请求**pull_home_market_trend**会推送初始化数据，每个市场最多**72**条，之后会推送增量数据
+* ["156574674567", "0.2"]
+* [k线开始时间ms, 价格]
+``` json
+{
+	method:"push_home_market_trend"
+	data:{
+		"usdt":{
+			"doge": [
+				["156574674567", "0.2"],
+				["156574674567", "0.4"],
+				...
+			],
+			"btc: [["156574674567", "0.2"], ...],
+		},
+		"btc":{
+			"eth: [["156574674567", "0.2"], ...],
+			...
+		}
+	}
+}
+```
+
 ## 当前交易对实时成交记录
 订阅
 ```json
@@ -205,6 +258,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 }
 ```
 推送
+* 第一次请求pull_deal_order_list会返回最大100条实时成交数据，之后会增量推送
 * [1532488767000,"buy","10.00000000","50.00000000","1532436029270392021"]
 * [时间戳, 交易类型(buy/sell）,成交价,成交数量,订单号]
 ```json
@@ -274,14 +328,14 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 订阅
 * market 交易对，交易对切换，需要重新订阅
 * k_line_type K线类型，单位为分钟的数字，字符串类型
-* k_line_count k线数据长度，最大200
+* k_line_count k线数据长度，最大**500**条
 ```json
 {
     "method" : "pull_kline_graph",
     "data" : {
         "market" : "eth_usdt",
         "k_line_type" : "1",
-        "k_line_count" : "200",
+        "k_line_count" : "500",
     }
 }
 ```
