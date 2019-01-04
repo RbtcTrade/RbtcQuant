@@ -91,7 +91,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 
 ### ws 特别说明
 * 请求ws协议表格列“是否针对单个市场”值为“是”的协议之前，必须先请求**pull_user_market**，market字段填写你需要订阅的市场（或称交易对）。
-* **pull_user_market**拥有订阅市场、登录两种功能。协议包中market指定的就是市场（或称交易对），当不传market的时候，请求ws协议表格列“是否针对单个市场”值为“是”的协议是无效的。当不传market的时候，请求**pullhomemarket_quote**和**pullhomemarket_trend**返回的是所有交易所支持的市场的数据。
+* **pull_user_market**拥有订阅市场、登录两种功能。协议包中market指定的就是市场（或称交易对），当不传market的时候，请求ws协议表格列“是否针对单个市场”值为“是”的协议是无效的。当不传market的时候，请求**pull_home_market_quote**和**pull_home_market_trend**返回的是所有交易所支持的市场的数据。
 * 关于切换市场，切换市场需先请求**pull_user_market**，market字段填写你需要订阅的市场（或称交易对）。
 
 ## <span id = "pull_merge_depth_order_list">pull_merge_depth_order_list 委托挂单深度</span>
