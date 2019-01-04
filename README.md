@@ -21,17 +21,17 @@ wss://market-api.rbtc.io/sub
 |接口|说明|是否需要用户验证|返回|是否针对单个市场|
 ----------------------|---------------------|---------------------|---------------------|---------------------|
 [pull_user_market](#pull_user_market)|订阅市场或登录|-|push_user_market|是|
-pull_user_assets	|请求用户当前余额|是|push_user_assets|-|
-pull_user_order	|请求用户当前交易对委托|是|push_user_order|是|
-pull_user_deal	|请求用户当前交易对已成交记录|是|push_user_deal|是|
-order	|委托挂单|是|order_resp|是|
-withdrawal	|撤单|是|withdrawal_resp|是|
-pull_home_market_quote	|请求24小时行情数据|否|push_home_market_quote|多|
-pull_home_market_trend	|请求3日价格趋势|否|push_home_market_trend|多|
-pull_merge_depth_order_list	|请求委托挂单深度|否|push_merge_depth_order_list|是|
-pull_kline_graph	|请求k线|否|push_kline_graph|是|
-pull_deal_order_list	|请求当前交易对实时成交记录|否|push_deal_order_list|是|
-pull_heart	|心跳包|否|push_heart|-|
+[pull_user_assets](#pull_user_assets)	|请求用户当前余额|是|push_user_assets|-|
+[pull_user_order](#pull_user_order)	|请求用户当前交易对委托|是|push_user_order|是|
+[pull_user_deal](#pull_user_deal)	|请求用户当前交易对已成交记录|是|push_user_deal|是|
+[order](#order)	|委托挂单|是|order_resp|是|
+[withdrawal](#withdrawal)	|撤单|是|withdrawal_resp|是|
+[pull_home_market_quote](#pull_home_market_quote)	|请求24小时行情数据|否|push_home_market_quote|多|
+[pull_home_market_trend](#pull_home_market_trend)	|请求3日价格趋势|否|push_home_market_trend|多|
+[pull_merge_depth_order_list](#pull_merge_depth_order_list)	|请求委托挂单深度|否|push_merge_depth_order_list|是|
+[pull_kline_graph](#pull_kline_graph)	|请求k线|否|push_kline_graph|是|
+[pull_deal_order_list](#pull_deal_order_list)	|请求当前交易对实时成交记录|否|push_deal_order_list|是|
+[pull_heart](#pull_heart)	|心跳包|否|push_heart|-|
 * 上述表格中，“-”表示无关；“是否针对单个市场”列中的“多”，表示该协议既可以用在多个市场也可以针对单个市场。
 
 ## ws 数据格式
@@ -372,6 +372,29 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
         ["1534196280000","4.59185000","4.59235000","4.58500000","4.58545000","287.72148820"],
         ["1534197180000","4.58545000","4.58545000","4.53725000","4.54845000","303.61372494"]
     ]
+}
+```
+
+## <span id = "pull_heart">pull_heart 心跳包</span>
+每隔5-10秒发一次，用于保持连接
+请求
+* time 发送者本地时间戳，服务器收到后会原值返回。发送者可以根据当前的本地时间戳-time，求出网络延迟
+```json
+{
+    "method":"pull_heart",
+    "data":{
+    	"time":"123412341234",
+    }
+}
+```
+
+返回
+```json
+{
+    "method":"push_heart",
+    "data":{
+    	"time":"123412341234",
+    }
 }
 ```
 
