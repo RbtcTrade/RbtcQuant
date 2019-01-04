@@ -167,7 +167,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 推送
 * 第一次推送最多 max_count 条数的委托，后面推送变动的数据
 * ["1529401690299552949",1529402081000,"sell","100001.00000000","0.00010000","0.00010000","ing"]
-* 订单号，时间，类型，价格，成交数量，委托数量，状态（ing委托中，withdrawal撤单）
+* 订单号，时间，类型，价格，未成交数量，委托数量，状态（ing委托中，withdrawal撤单）
 ```json
 {
     "method":"push_user_order",
