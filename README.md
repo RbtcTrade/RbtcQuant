@@ -377,6 +377,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 
 ## <span id = "pull_heart">pull_heart 心跳包</span>
 每隔5-10秒发一次，用于保持连接
+
 请求
 * time 发送者本地时间戳，服务器收到后会原值返回。发送者可以根据当前的本地时间戳-time，求出网络延迟
 ```json
