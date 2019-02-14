@@ -1,7 +1,6 @@
 # RbtcQuant
 
 [RBTC](https://www.rbtc.io/)交易平台量化交易API
-
 ----
 
 ## 生成 RSA 公钥私钥
@@ -12,10 +11,29 @@ npm run create-rsa
 或 [openssl](https://www.openssl.org/) 生成
 
 
+
 ## ws url
-```bash
-wss://market-api.rbtc.io/sub
+系统不主动暴露url,而是通过一个前置的服务来动态返回url，
+### 通信方法
+HTTP GET
+
+### 地址
+/chooseLeast
+
+### 参数
+无
+### 返回状态码
+总是200
+### 返回值
+json数据
+```json
+{
+    "address":"服务器地址",
+    "error":"错误信息，如果成功，本字段不存在"
+}
 ```
+应用连接返回的地址(如wss://market-api.rbtc.io/sub)
+
 
 ## ws 协议
 |接口|说明|是否需要用户验证|返回|是否针对单个市场|
