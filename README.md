@@ -10,8 +10,83 @@ npm run create-rsa
 ```
 或 [openssl](https://www.openssl.org/) 生成
 
+## http 协议
+
+### 下单
+
+#### HTTP方法及地址
+POST **/order**
+
+#### 参数
+JSON
+* market 当前交易市场， _连接, 左边是交易货币，右边是支付货币，如btc_usdt
+* uid 用户id[可以选字段，当这个不填或填0，表示不登录，token和rsa_ciphertext将被忽略]
+* token 当前用户登录时随机生成512长度的字符串 RBTC登录
+* rsa_ciphertext 当前用户手机号 RSA私钥加密的 base64 字符串，请用户先设置RSA公钥 RSA公钥设置,用户登录token和rsa_ciphertext必须传一个
+* data 下单数据
+    * type 类型 Buy/Sell
+    * price 价格
+    * count 数量
+    * ts 当前毫秒时间戳
 
 
+```json
+{
+  "market": "eos_usdt",
+  "uid": 7474,
+  "token": "123",
+  "rsa_ciphertext": "41242",
+  "data": {
+    "count": "0.0001",
+    "price": "100001",
+    "ts": 1529402865467,
+    "type": "Buy"
+  }
+}
+```
+
+#### 返回状态码
+总是200
+
+#### 返回值
+* [error_code](#error_code)
+```json
+{"order_id":"1550216642281386001","error_code":0}
+```
+### 取消订单
+
+#### HTTP方法
+POST **/withdraw**
+
+#### 参数
+JSON
+* market 当前交易市场， _连接, 左边是交易货币，右边是支付货币，如btc_usdt
+* uid 用户id[可以选字段，当这个不填或填0，表示不登录，token和rsa_ciphertext将被忽略]
+* token 当前用户登录时随机生成512长度的字符串 RBTC登录
+* rsa_ciphertext 当前用户手机号 RSA私钥加密的 base64 字符串，请用户先设置RSA公钥 RSA公钥设置,用户登录token和rsa_ciphertext必须传一个
+* data 下单数据
+    * order_id 订单id
+
+```json
+{
+  "market": "eos_usdt",
+  "uid": 7474,
+  "token": "123",
+  "rsa_ciphertext": "41242",
+  "data": {
+    "order_id": "1550215048122084003"
+     }
+}
+```
+
+#### 返回状态码
+总是200
+
+#### 返回值
+* [error_code](#error_code)
+```json
+{"order_id":"1550216642281386001","error_code":0}
+```
 ## ws url
 系统不主动暴露url,而是通过一个前置的服务来动态返回url，
 ### 通信方法
