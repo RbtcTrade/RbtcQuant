@@ -2,7 +2,11 @@
 
 [RBTC](https://www.rbtc.io/)交易平台量化交易API
 ----
+## 协议变更记录
 
+|   变更版本    |   变更时间    |   变更内容    |   变更目的    |  
+|   --- |   --- |   --- |   --- |  
+|   1.1 |   2019-04-1 15:00 |   深度/实时成交/用户挂单/K线/用户成交 数据添加一个顶级的market字段,类型为字符串,表示数据对应的市场    |   用户切换市场时,服务器可能推送一个旧市场的数据,添加该字段,使得使用者可以进行过滤 |   
 ## 生成 RSA 公钥私钥
 ```bash
 # 1024bit, pkcs8
@@ -200,6 +204,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 ```json
 {
     "method":"push_merge_depth_order_list",
+    "market":"btc_usdt",
     "data":{
         "buy":[
             ["33.31000000","6.60912639"],
@@ -265,6 +270,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 ```json
 {
     "method":"push_user_order",
+    "market":"btc_usdt",
     "data":[
         ["1529401690299552949",1529402081000,"sell","100001.00000000","0.00010000","0.00010000","ing"],
         ["1529401690299552948",1529402081000,"buy","100000.00000000","0.00010000","0.00010000","ing"]
@@ -287,6 +293,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 ```json
 {
     "method":"push_user_deal",
+    "market":"btc_usdt",
     "data":[
         ["1529401690299552949",1529402081000,"sell","100001.00000000","0.00010000","0.00010000","deal"],
         ["1529401690299552948",1529402081000,"buy","100000.00000000","0.00010000","0.00010000","deal"]
@@ -364,6 +371,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 ```json
 {
     "method":"push_deal_order_list",
+    "market":"btc_usdt",
     "data":[
         [1532488767000,"buy","10.00000000","50.00000000","1532436029270392021"],
         [1534315010000,"sell","5.00000000","1.00000000","1534314570043489943"]
@@ -431,6 +439,7 @@ Buffer.from(msg.binaryData, 'binary').toString('utf8');
 ```json
 {
     "method" : "pull_kline_graph",
+    "market","btc_usdt",
     "data" : {
         "k_line_type" : "1",
         "k_line_count" : "500",
