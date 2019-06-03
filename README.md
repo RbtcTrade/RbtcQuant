@@ -1,6 +1,6 @@
 # RbtcQuant
 
-[RBTC](https://www.rbtc.io/)交易平台量化交易API
+[RBTC](https://www.dxb.com/)交易平台量化交易API
 ----
 ## 协议变更记录
 
@@ -111,7 +111,7 @@ json数据
     "error":"错误信息，如果成功，本字段不存在"
 }
 ```
-应用连接返回的地址(如wss://market-api.rbtc.io/sub)
+应用连接返回的地址(如wss://market-api.dxb.com/sub)
 
 
 ## ws 协议
